@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>pt.test</groupId>
+    <artifactId>remotewar</artifactId>
+    <version>1.0</version>
+
+    <packaging>war</packaging>
+
+    <properties>
+        <!-- JAVA version -->
+        <java-version>1.8</java-version>
+
+        <!-- Payara version -->
+        <payara-version>5.2021.3</payara-version>
+
+        <!-- Maven plugin versions -->
+        <ejb-plugin-version>3.1.0</ejb-plugin-version>
+        <war-plugin-version>3.3.1</war-plugin-version>
+        <ear-plugin-version>3.1.0</ear-plugin-version>
+        <clean-plugin-version>3.1.0</clean-plugin-version>
+        <compiler-plugin-version>3.8.1</compiler-plugin-version>
+        <deploy-plugin-version>3.0.0-M1</deploy-plugin-version>
+        <install-plugin-version>3.0.0-M1</install-plugin-version>
+        <resources-plugin-version>3.2.0</resources-plugin-version>
+        
+        <payara-micro-plugin-version>1.3.0</payara-micro-plugin-version>
+
+        <!-- EJB Maven plugin version -->
+        <ejb-maven-version>3.2</ejb-maven-version>
+        
+        <domain.dir>${user.home}/modules/remotewar/domain</domain.dir>
+
+    </properties>
+    
+    <profiles>
+        <profile>
+            <id>debug</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>fish.payara.maven.plugins</groupId>
+                        <artifactId>payara-micro-maven-plugin</artifactId>
+                        <version>${payara-micro-plugin-version}</version>
+
+                        <configuration>
+                            <useUberJar>true</useUberJar>
+                            <javaCommandLineOptions>
+                                <option>
+                                    <value>-Xdebug</value>
+                                </option>
+                                <option>
+                                    <key>-Xrunjdwp:transport</key>
+                                    <value>dt_socket,server=y,suspend=y,address=5005</value>
+                                </option>
+                            </javaCommandLineOptions>
+                        </configuration>
+
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    
+    </profiles>
+
+    <repositories>
+        <repository>
+            <id>payara-patched-externals</id>
+            <name>Payara Patched Externals</name>
+            <url>https://raw.github.com/payara/Payara_PatchedProjects/master</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>payara-nexus-artifacts</id>
+            <name>Payara Nexus Artifacts</name>
+            <url>https://nexus.payara.fish/repository/payara-artifacts</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- All of our provided dependencies actually come from the application server -->
+            <dependency>
+                <groupId>fish.payara.api</groupId>
+                <artifactId>payara-bom</artifactId>
+                <version>${payara-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+
+        <!-- Platform dependencies -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile</groupId>
+            <artifactId>microprofile</artifactId>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>fish.payara.api</groupId>
+            <artifactId>payara-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+
+                <!-- Maven Clean Plugin , used to clean up after build -->
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${clean-plugin-version}</version>
+                </plugin>
+
+
+                <!-- Maven Compiler Plugin , for JARs -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler-plugin-version}</version>
+                    <configuration>
+                        <!-- release>${java-version}</release -->
+                        <target>${java-version}</target>
+                        <source>${java-version}</source>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+
+                <!-- Maven Deploy plugin, to deploy built artifacts to a remote repository, not that we use it but at least this version is controlled -->
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${deploy-plugin-version}</version>
+                </plugin>
+
+                <!-- Maven Install plugin, install the build artifacts into the LOCAL repository -->
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${install-plugin-version}</version>
+                </plugin>
+
+                <!-- Maven Resources plugin, copies the resources to output directory to include in final JAR -->
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${resources-plugin-version}</version>
+                </plugin>
+
+                <!-- Maven EJB Plugin, for EJBs -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ejb-plugin</artifactId>
+                    <version>${ejb-plugin-version}</version>
+                    <configuration>
+                        <ejbVersion>${ejb-maven-version}</ejbVersion>
+                    </configuration>
+                </plugin>
+
+                <!-- Maven WAR Plugin, for WARs -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${war-plugin-version}</version>
+                    <configuration>
+                        <!-- Since we are using Servlet 3+ we do not need web.xml to register JAX-RS webservices so the war plugin must not fail if it doesn't find it -->
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                        <attachClasses>true</attachClasses>
+                        <classesClassifier>classes</classesClassifier>
+                    </configuration>
+                </plugin>
+
+                <!-- Maven EAR Plugin exceptionally defined here as whole -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ear-plugin</artifactId>
+                    <version>${ear-plugin-version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${jar-plugin-version}</version>
+                </plugin>
+                
+                <!-- Payara Micro start execution so that I can connect it to Domain Data Grid -->
+                <plugin>
+                    <groupId>fish.payara.maven.plugins</groupId>
+                    <artifactId>payara-micro-maven-plugin</artifactId>
+                    <version>${payara-micro-plugin-version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>start</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <useUberJar>true</useUberJar>
+                        <commandLineOptions>
+                            <option>
+                                <key>--clustermode</key>
+                                <value>domain:10.30.194.120:4900</value>
+                            </option>
+                        </commandLineOptions>
+                    </configuration>
+                </plugin>
+
+
+
+            </plugins>
+        </pluginManagement>
+        
+        <plugins>
+            <!-- Payara Micro bundle execution will configure the Uber JAR -->
+            <plugin>
+                <groupId>fish.payara.maven.plugins</groupId>
+                <artifactId>payara-micro-maven-plugin</artifactId>
+
+                <!-- An execution must be defined to activate payara plugin and create a uber jar -->
+                <executions>
+
+                    <execution>
+                        <id>BUNDLE</id>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                        <configuration>
+                            <payaraVersion>${payara-version}</payaraVersion>
+                            <systemProperties>
+                                <property>
+                                    <name>payaramicro.port</name>
+                                    <value>20000</value>
+                                </property>
+                            </systemProperties>
+                            <appendSystemProperties>true</appendSystemProperties>
+                        </configuration>
+                    </execution>
+                    
+                </executions>
+             </plugin>
+        </plugins>
+
+    </build>
+
+</project>
