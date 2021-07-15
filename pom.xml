@@ -130,7 +130,7 @@
         <dependency>
             <groupId>org.eclipse</groupId>
             <artifactId>yasson</artifactId>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         
         <dependency>
