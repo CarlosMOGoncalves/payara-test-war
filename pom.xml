@@ -19,7 +19,7 @@
         <java-version>1.8</java-version>
 
         <!-- Payara version -->
-        <payara-version>5.2020.6</payara-version>
+        <payara-version>5.2021.6</payara-version>
 
         <!-- Maven plugin versions -->
         <ejb-plugin-version>3.1.0</ejb-plugin-version>
@@ -276,6 +276,7 @@
                                 </property>
                             </systemProperties>
                             <appendSystemProperties>true</appendSystemProperties>
+                            <autoDeployContextRoot>payara-test-war</autoDeployContextRoot>
                         </configuration>
                     </execution>
                     

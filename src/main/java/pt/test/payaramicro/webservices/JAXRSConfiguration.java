@@ -16,6 +16,7 @@ public class JAXRSConfiguration extends Application {
 
         // Resources
         resources.add(YassonResource.class);
+        resources.add(InterceptorResource.class);
 
         return resources;
     }
