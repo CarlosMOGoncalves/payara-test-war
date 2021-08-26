@@ -1,4 +1,4 @@
-package pt.test.remotewar.jsonb;
+package pt.test.payaramicro.jsonb;
 
 import java.util.Date;
 import javax.json.bind.serializer.JsonbSerializer;

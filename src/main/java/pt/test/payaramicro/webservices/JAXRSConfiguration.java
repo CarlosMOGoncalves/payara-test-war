@@ -1,4 +1,4 @@
-package pt.test.remotewar.webservices;
+package pt.test.payaramicro.webservices;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +15,7 @@ public class JAXRSConfiguration extends Application {
         Set<Class<?>> resources = new HashSet<>();
 
         // Resources
-        resources.add(EventResource.class);
+        resources.add(YassonResource.class);
 
         return resources;
     }

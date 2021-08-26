@@ -1,4 +1,4 @@
-package pt.test.remotewar.ejb;
+package pt.test.payaramicro.remoteobservers;
 
 import java.util.logging.Logger;
 import javax.ejb.Singleton;
@@ -10,7 +10,7 @@ public class RemoteEJBObserver {
 
     private static final Logger LOGGER = Logger.getLogger(RemoteEJBObserver.class.getName());
 
-    public void observeCacheEvent(@Observes @Inbound String message) {
+    public void observeRemoteEvent(@Observes @Inbound String message) {
         LOGGER.info("Triggered remotely on RemoteEJBObserver from remotewar");
     }
 

@@ -1,4 +1,4 @@
-package pt.test.remotewar.jsonb;
+package pt.test.payaramicro.jsonb;
 
 import java.lang.reflect.Type;
 import java.util.Locale;

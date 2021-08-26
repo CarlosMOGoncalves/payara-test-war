@@ -1,4 +1,4 @@
-package pt.test.remotewar.jsonb;
+package pt.test.payaramicro.jsonb;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
