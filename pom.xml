@@ -19,7 +19,7 @@
         <java-version>1.8</java-version>
 
         <!-- Payara version -->
-        <payara-version>5.2021.6</payara-version>
+        <payara-version>5.2021.7</payara-version>
 
         <!-- Maven plugin versions -->
         <ejb-plugin-version>3.1.0</ejb-plugin-version>
